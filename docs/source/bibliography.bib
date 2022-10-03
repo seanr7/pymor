@@ -1,4 +1,3 @@
-
 @Book{A05,
   author =       {Antoulas, A.~C.},
   title =        {Approximation of Large-Scale Dynamical Systems},
@@ -35,6 +34,18 @@
     url={http://arxiv.org/abs/1909.13764}
 }
 
+@article{BBH19,
+  author         = {Buchfink, Patrick and Bhatt, Ashish and Haasdonk, Bernard},
+  title          = {Symplectic Model Order Reduction with Non-Orthonormal Bases},
+  journal        = {Mathematical and Computational Applications},
+  year           = {2019},
+  volume         = {24},
+  number         = {2},
+  issn           = {2297--8747},
+  article-number = {43},
+  doi            = {10.3390/mca24020043},
+}
+
 @article{BBKS18,
   title={RADI: a low-rank ADI-type algorithm for large scale algebraic Riccati equations},
   author={Benner, Peter and Bujanovi{\'c}, Zvonimir and K{\"u}rschner, Patrick and Saak, Jens},
@@ -64,16 +75,22 @@
   publisher =    {Springer US}
 }
 
-@article{BMNP04,
-  title = {An `empirical Interpolation' Method: Application to Efficient Reduced-Basis Discretization of Partial Differential Equations},
-  author = {Barrault, Maxime and Maday, Yvon and Nguyen, Ngoc Cuong and Patera, Anthony T.},
-  year = {2004},
-  volume = {339},
-  pages = {667--672},
-  issn = {1631-073X},
-  doi = {10.1016/j.crma.2004.08.006},
-  journal = {Comptes Rendus Mathematique. Academie des Sciences. Paris},
-  number = {9},
+@article{BCDDPW11,
+  title={Convergence rates for greedy algorithms in reduced basis methods},
+  author={Binev, Peter and Cohen, Albert and Dahmen, Wolfgang and DeVore, Ronald and Petrova, Guergana and Wojtaszczyk, Przemyslaw},
+  journal={SIAM journal on mathematical analysis},
+  volume={43},
+  number={3},
+  pages={1457--1472},
+  year={2011},
+  publisher={SIAM}
+}
+
+@article{BEOR14,
+  title={A numerically stable a posteriori error estimator for reduced basis approximations of elliptic equations},
+  author={Buhr, Andreas and Engwer, Christian and Ohlberger, Mario and Rave, Stephan},
+  journal={arXiv preprint arXiv:1407.8005},
+  year={2014}
 }
 
 @Article{BG09,
@@ -109,34 +126,16 @@
   month =        dec
 }
 
-@article{BCDDPW11,
-  title={Convergence rates for greedy algorithms in reduced basis methods},
-  author={Binev, Peter and Cohen, Albert and Dahmen, Wolfgang and DeVore, Ronald and Petrova, Guergana and Wojtaszczyk, Przemyslaw},
-  journal={SIAM journal on mathematical analysis},
-  volume={43},
-  number={3},
-  pages={1457--1472},
-  year={2011},
-  publisher={SIAM}
-}
-
-@article{BBH19,
-  author         = {Buchfink, Patrick and Bhatt, Ashish and Haasdonk, Bernard},
-  title          = {Symplectic Model Order Reduction with Non-Orthonormal Bases},
-  journal        = {Mathematical and Computational Applications},
-  year           = {2019},
-  volume         = {24},
-  number         = {2},
-  issn           = {2297--8747},
-  article-number = {43},
-  doi            = {10.3390/mca24020043},
-}
-
-@article{BEOR14,
-  title={A numerically stable a posteriori error estimator for reduced basis approximations of elliptic equations},
-  author={Buhr, Andreas and Engwer, Christian and Ohlberger, Mario and Rave, Stephan},
-  journal={arXiv preprint arXiv:1407.8005},
-  year={2014}
+@article{BMNP04,
+  title = {An `empirical Interpolation' Method: Application to Efficient Reduced-Basis Discretization of Partial Differential Equations},
+  author = {Barrault, Maxime and Maday, Yvon and Nguyen, Ngoc Cuong and Patera, Anthony T.},
+  year = {2004},
+  volume = {339},
+  pages = {667--672},
+  issn = {1631-073X},
+  doi = {10.1016/j.crma.2004.08.006},
+  journal = {Comptes Rendus Mathematique. Academie des Sciences. Paris},
+  number = {9},
 }
 
 @article{BS18,
@@ -182,17 +181,6 @@
  year = {2013}
 }
 
-@article{GP05,
-  title={A posteriori error bounds for reduced-basis approximations of parametrized parabolic partial differential equations},
-  author={Grepl, Martin A and Patera, Anthony T},
-  journal={ESAIM: Mathematical Modelling and Numerical Analysis},
-  volume={39},
-  number={1},
-  pages={157--181},
-  year={2005},
-  publisher={EDP Sciences}
-}
-
 @Article{GAB08,
   author =       {Gugercin, S. and Antoulas, A.~C. and Beattie, C.},
   title =        {{$\mathcal{H}_2$} Model Reduction for Large-Scale Linear
@@ -205,6 +193,17 @@
   doi =          {10.1137/060666123}
 }
 
+@article{GP05,
+  title={A posteriori error bounds for reduced-basis approximations of parametrized parabolic partial differential equations},
+  author={Grepl, Martin A and Patera, Anthony T},
+  journal={ESAIM: Mathematical Modelling and Numerical Analysis},
+  volume={39},
+  number={1},
+  pages={157--181},
+  year={2005},
+  publisher={EDP Sciences}
+}
+
 @Article{GPBV12,
     author =    {Gugercin, S. and Polyuga, Rostyslav V. and Beattie, C. and {van der Schaft}, A.},
 	title =     {Structure-preserving tangential interpolation for model reduction of port-{H}amiltonian systems},
@@ -214,18 +213,6 @@
 	pages =     {1963--1974},
 	year =      {2012},
 	doi =       {10.1016/j.automatica.2012.05.052},
-}
-
-@InCollection{Haa17,
-  author =       {Haasdonk, B.},
-  title =        {Reduced Basis Methods for Parametrized {PDE}s---A Tutorial
-                  Introduction for Stationary and Instationary Problems},
-  booktitle =    {Model Reduction and Approximation: Theory and Algorithms},
-  publisher =    {SIAM},
-  year =         2017,
-  editor =       {Benner, P. and Cohen, A. and Ohlberger, M. and Willcox, K.},
-  pages =        {65--136},
-  doi =          {10.1137/1.9781611974829.ch2}
 }
 
 @Article{HDO11,
@@ -240,17 +227,15 @@
   pages =        {423--442}
 }
 
-@Article{HO08,
-  author =       {Haasdonk, B. and Ohlberger, M.},
-  title =        {Reduced basis method for finite volume approximations of
-                  parametrized linear evolution equations},
-  journal =      {{ESAIM}: Math. Model. Numer. Anal.},
-  year =         2008,
-  volume =       42,
-  number =       2,
-  pages =        {277--302},
-  fjournal =     {M2AN. Mathematical Modelling and Numerical Analysis},
-  issn =         {0764-583X}
+@Article{HLR18,
+  author =       {Himpe, C. and Leibner, T. and Rave, S.},
+  title =        {Hierarchical Approximate Proper Orthogonal Decomposition},
+  journal =      {{SIAM} J. Sci. Comput.},
+  year =         2018,
+  volume =       40,
+  number =       5,
+  pages =        {A3267--A3292},
+  doi =          {10.1137/16M1085413}
 }
 
 @article{HMT11,
@@ -264,15 +249,17 @@
   publisher={SIAM}
 }
 
-@Article{HLR18,
-  author =       {Himpe, C. and Leibner, T. and Rave, S.},
-  title =        {Hierarchical Approximate Proper Orthogonal Decomposition},
-  journal =      {{SIAM} J. Sci. Comput.},
-  year =         2018,
-  volume =       40,
-  number =       5,
-  pages =        {A3267--A3292},
-  doi =          {10.1137/16M1085413}
+@Article{HO08,
+  author =       {Haasdonk, B. and Ohlberger, M.},
+  title =        {Reduced basis method for finite volume approximations of
+                  parametrized linear evolution equations},
+  journal =      {{ESAIM}: Math. Model. Numer. Anal.},
+  year =         2008,
+  volume =       42,
+  number =       2,
+  pages =        {277--302},
+  fjournal =     {M2AN. Mathematical Modelling and Numerical Analysis},
+  issn =         {0764-583X}
 }
 
 @book{HPUU09,
@@ -293,12 +280,16 @@
   publisher={Elsevier}
 }
 
-@phdthesis{PK16,
-  title={Efficient low-rank solution of large-scale matrix equations},
-  author={K{\"u}rschner, Patrick},
-  year={2016},
-  url={http://pubman.mpdl.mpg.de/pubman/},
-  school={Shaker Verlag Aachen}
+@InCollection{Haa17,
+  author =       {Haasdonk, B.},
+  title =        {Reduced Basis Methods for Parametrized {PDE}s---A Tutorial
+                  Introduction for Stationary and Instationary Problems},
+  booktitle =    {Model Reduction and Approximation: Theory and Algorithms},
+  publisher =    {SIAM},
+  year =         2017,
+  editor =       {Benner, P. and Cohen, A. and Ohlberger, M. and Willcox, K.},
+  pages =        {65--136},
+  doi =          {10.1137/1.9781611974829.ch2}
 }
 
 @Article{LiW02,
@@ -313,18 +304,6 @@
   doi =          {10.1137/S0895479801384937}
 }
 
-@Article{MS96,
-  author =       {Meyer, D.~G. and Srinivasan, S.},
-  title =        {Balancing and model reduction for second-order form linear
-                  systems},
-  journal =      {{IEEE} Trans. Autom. Control},
-  year =         1996,
-  volume =       41,
-  number =       11,
-  pages =        {1632--1644},
-  doi =          {10.1109/9.544000}
-}
-
 @Article{MG91,
   author =       {Mustafa, D. and Glover, K.},
   title =        {Controller Reduction by $\mathcal{H}_\infty$-Balanced
@@ -335,6 +314,18 @@
   number =       6,
   pages =        {668--682},
   doi =          {10.1109/9.86941}
+}
+
+@Article{MS96,
+  author =       {Meyer, D.~G. and Srinivasan, S.},
+  title =        {Balancing and model reduction for second-order form linear
+                  systems},
+  journal =      {{IEEE} Trans. Autom. Control},
+  year =         1996,
+  volume =       41,
+  number =       11,
+  pages =        {1632--1644},
+  doi =          {10.1109/9.544000}
 }
 
 @Article{MSKC21,
@@ -368,6 +359,14 @@
   doi =          {10.1109/31.1720}
 }
 
+@phdthesis{PK16,
+  title={Efficient low-rank solution of large-scale matrix equations},
+  author={K{\"u}rschner, Patrick},
+  year={2016},
+  url={http://pubman.mpdl.mpg.de/pubman/},
+  school={Shaker Verlag Aachen}
+}
+
 @article{PM16,
   author  = {Peng, L. and Mohseni, K.},
   title   = {Symplectic Model Reduction of Hamiltonian Systems},
@@ -387,6 +386,17 @@
   url={https://scholarship.rice.edu/handle/1911/16844}
 }
 
+@article{RM06,
+  title={Efficient computation of multivariable transfer function dominant poles using subspace acceleration},
+  author={Rommes, Joost and Martins, Nelson},
+  journal={IEEE transactions on power systems},
+  volume={21},
+  number={4},
+  pages={1471--1483},
+  year={2006},
+  publisher={IEEE}
+}
+
 @Article{RS08,
   author =       {Reis, T. and Stykel, T.},
   title =        {Balanced truncation model reduction of second-order systems},
@@ -398,15 +408,15 @@
   doi =          {10.1080/13873950701844170}
 }
 
-@article{RM06,
-  title={Efficient computation of multivariable transfer function dominant poles using subspace acceleration},
-  author={Rommes, Joost and Martins, Nelson},
-  journal={IEEE transactions on power systems},
-  volume={21},
-  number={4},
-  pages={1471--1483},
-  year={2006},
-  publisher={IEEE}
+@article{S11,
+  title={Symplectic Gram-Schmidt Algorithm with Re-Orthogonalization},
+  author={Al-Aidarous, Eman Salem},
+  journal={Journal of King Abdulaziz University: Science},
+  volume={23},
+  number={1},
+  pages={11--20},
+  year = {2011},
+  doi = {10.4197/Sci.23-1.2}
 }
 
 @article{SHB21,
@@ -424,17 +434,6 @@
   journal = {Numerical Linear Algebra with Applications},
   year = {2016},
   DOI = { 10.1002/nla.2026}
-}
-
-@article{S11,
-  title={Symplectic Gram-Schmidt Algorithm with Re-Orthogonalization},
-  author={Al-Aidarous, Eman Salem},
-  journal={Journal of King Abdulaziz University: Science},
-  volume={23},
-  number={1},
-  pages={11--20},
-  year = {2011},
-  doi = {10.4197/Sci.23-1.2}
 }
 
 @article{TRLBK14,
