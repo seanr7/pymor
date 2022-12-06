@@ -61,6 +61,7 @@ install_suggests = {
     'dune-gdt>=2022.5.3; platform_system=="Linux" and platform_machine=="x86_64"': 'generic discretization toolbox',
     'dune-xt[visualisation]>=2022.5.3; platform_system=="Linux" and platform_machine=="x86_64"':
         'DUNE extensions for dune-gdt',
+    'sparse': 'sparse matrices that can have objects as dtype'
 }
 io_requires = ['pyevtk', 'xmljson', 'meshio>=4.4', 'lxml', 'gmsh']
 install_suggests.update({p: 'optional File I/O support libraries' for p in io_requires})
