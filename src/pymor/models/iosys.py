@@ -1334,15 +1334,27 @@ class PHLTIModel(LTIModel):
         E(\mu) \dot{x}(t, \mu) & = (J(\mu) - R(\mu))Q(\mu)   x(t, \mu) + (G(\mu) - P(\mu)) u(t), \\
                      y(t, \mu) & = (G(\mu) + P(\mu))^TQ(\mu) x(t, \mu) + (S(\mu) - N(\mu)) u(t),
 
-    with :math:`E(\mu) \succeq 0`, :math:`J(\mu) = -J(\mu)^T`, :math:`N(\mu) = -N(\mu)^T` and
+    with :math:`H(\mu)=E(\mu)Q(\mu)^T \succeq 0` and
 
     .. math::
+        \Gamma(\mu) =
+        \begin{bmatrix}
+            J(\mu) & G(\mu) \\
+            -G(\mu)^T & N(\mu)
+        \end{bmatrix}
+
+        \qquad \text{and} \qquad
+
         W(\mu) =
         \begin{bmatrix}
             R(\mu) & P(\mu) \\
             P(\mu)^T & S(\mu)
         \end{bmatrix}
         \succeq 0.
+
+    A dynamical system of this form, together with a given quadratic (energy) function
+    :math:`\mathcal{H}=\tfrac{1}{2} x(t, \mu)^T H(\mu) x(t, \mu)`, called Hamiltonian
+    with :math:`H(\mu) \succeq 0`, is called port-Hamiltonian system.
 
     All methods related to the transfer function
     (e.g., frequency response calculation and Bode plots)
@@ -1364,6 +1376,8 @@ class PHLTIModel(LTIModel):
         The |Operator| N or `None` (then N is assumed to be zero).
     E
         The |Operator| E or `None` (then E is assumed to be identity).
+    Q
+        The |Operator| Q or `None` (then Q is assumed to be identity).
     solver_options
         The solver options to use to solve the Lyapunov equations.
     name
@@ -1446,7 +1460,17 @@ class PHLTIModel(LTIModel):
                          name=name)
         self.__auto_init(locals())
 
-    def to_qless_model(self):
+    def to_generalized_model(self):
+        """
+        Convert the |PHLTIModel| to a |PHLTIModel| with :math:`Q=I`,
+        by left multiplication with :math:`Q^T`.
+
+        Returns
+        -------
+        model
+            Generalized |PHLTIModel|.
+
+        """
         if isinstance(self.Q, IdentityOperator):
             return self
 
