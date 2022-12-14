@@ -195,7 +195,7 @@ def solve_ricc_dense(A, E, B, C, R=None, S=None, trans=False, options=None):
         Riccati equation solution as a |NumPy array|.
     """
     _solve_ricc_dense_check_args(A, E, B, C, R, S, trans)
-    if S is not None:
+    if E is not None and S is not None:
         raise NotImplementedError
     options = _parse_options(options, ricc_dense_solver_options(), 'slycot', None, False)
 
@@ -226,6 +226,17 @@ def solve_ricc_dense(A, E, B, C, R=None, S=None, trans=False, options=None):
                             A, E, B, C, R, S)
         X = out[1]
         rcond = out[0]
+        _ricc_rcond_check('slycot.sg02ad', rcond)
+    elif S is not None:
+        m = C.shape[0] if not trans else B.shape[1]
+        p = B.shape[1] if not trans else C.shape[0]
+        if R is None:
+            R = np.eye(A.shape[0])
+        if trans:
+            X, rcond = slycot.sb02od(n, m, A, B, C, R, dico, p=p, L=S, fact='C')[:2]
+        else:
+            X, rcond = slycot.sb02od(n, m, A.T, C.T, B.T, R, dico, p=p, L=S.T, fact='C')[:2]
+        _ricc_rcond_check('slycot.sb02od', rcond)
     else:
         if trans:
             if R is None:
@@ -241,7 +252,7 @@ def solve_ricc_dense(A, E, B, C, R=None, S=None, trans=False, options=None):
                 G = C.T @ spla.solve(R, C)
             Q = B @ B.T
             X, rcond = slycot.sb02md(n, A.T, G, Q, dico)[:2]
-    _ricc_rcond_check('slycot.sb02md', rcond)
+        _ricc_rcond_check('slycot.sb02md', rcond)
 
     return X
 
@@ -314,8 +325,6 @@ def solve_ricc_lrcf(A, E, B, C, R=None, S=None, trans=False, options=None):
         |VectorArray| from `A.source`.
     """
     _solve_ricc_check_args(A, E, B, C, R, S, trans)
-    if S is not None:
-        raise NotImplementedError
     options = _parse_options(options, ricc_lrcf_solver_options(), 'slycot', None, False)
     if options['type'] != 'slycot':
         raise ValueError(f"Unexpected Riccati equation solver ({options['type']}).")
@@ -325,8 +334,10 @@ def solve_ricc_lrcf(A, E, B, C, R=None, S=None, trans=False, options=None):
     E = to_matrix(E, format='dense') if E else None
     B = B.to_numpy().T
     C = C.to_numpy()
+    if S is not None:
+        S = S.to_numpy() if not trans else S.to_numpy().T
 
-    X = solve_ricc_dense(A, E, B, C, R, trans, options)
+    X = solve_ricc_dense(A, E, B, C, R, S, trans, options)
 
     return A_source.from_numpy(_chol(X).T)
 
@@ -389,12 +400,10 @@ def solve_pos_ricc_lrcf(A, E, B, C, R=None, S=None, trans=False, options=None):
         solution, |VectorArray| from `A.source`.
     """
     _solve_ricc_check_args(A, E, B, C, R, S, trans)
-    if S is not None:
-        raise NotImplementedError
     options = _parse_options(options, pos_ricc_lrcf_solver_options(), 'slycot', None, False)
     if options['type'] != 'slycot':
         raise ValueError(f"Unexpected positive Riccati equation solver ({options['type']}).")
 
     if R is None:
         R = np.eye(len(C) if not trans else len(B))
-    return solve_ricc_lrcf(A, E, B, C, -R, trans, options)
+    return solve_ricc_lrcf(A, E, B, C, -R, S, trans, options)
