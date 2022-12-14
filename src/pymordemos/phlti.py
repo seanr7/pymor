@@ -8,6 +8,7 @@ from matplotlib import pyplot as plt
 from typer import run, Option
 
 from pymor.models.iosys import PHLTIModel
+from pymor.reductors.bt import PRBTReductor
 from pymor.reductors.ph.ph_irka import PHIRKAReductor
 
 
@@ -110,54 +111,30 @@ def msd(n=6, m_i=4, k_i=4, c_i=1, as_lti=False):
     if as_lti:
         return A, B, C, D, E
 
-    # Shift Q on LHS
-    E = Q.T @ E
-    J = Q.T @ J @ Q
-    R = Q.T @ R @ Q
-    G = Q.T @ G
-    P = Q.T @ P
-
-    return J, R, G, P, S, N, E
+    return J, R, G, P, S, N, E, Q
 
 
 def main(
         n: int = Option(100, help='Order of the Mass-Spring-Damper system.')
 ):
-    J, R, G, P, S, N, E = msd(n)
+    J, R, G, P, S, N, E, Q = msd(n)
 
-    fom = PHLTIModel.from_matrices(J, R, G, P, S, N, E)
+    fom = PHLTIModel.from_matrices(J, R, G, Q=Q)
+
+    prbt = PRBTReductor(fom)
+    rom_prbt = prbt.reduce(20)
 
     phirka = PHIRKAReductor(fom)
-    rom = phirka.reduce(20)
+    rom_phirka = phirka.reduce(20)
 
     # Magnitude plot
     w = (1e-2, 1e8)
     fig, ax = plt.subplots()
     fom.transfer_function.mag_plot(w, ax=ax, label='FOM')
-    rom.transfer_function.mag_plot(w, ax=ax, linestyle='--', label='ROM')
+    rom_phirka.transfer_function.mag_plot(w, ax=ax, linestyle='--', label='pH-IRKA')
+    rom_prbt.transfer_function.mag_plot(w, ax=ax, linestyle='--', label='PRBT')
     _ = ax.legend()
     plt.show()
-
-    # Poles
-    poles = fom.poles()
-    poles_lti = rom.poles()
-
-    fig, ax = plt.subplots()
-    ax.scatter(poles_lti.real, poles_lti.imag, marker='x', label='LTI')
-    ax.scatter(poles.real, poles.imag, marker='o', facecolors='none', edgecolor='orange', label='PH')
-    ax.set_title('Poles')
-    ax.legend()
-    ax.set(xlabel=r'Re($\lambda$)', ylabel=r'Im($\lambda$)')
-    plt.show()
-
-    err = fom - rom
-    err.transfer_function.mag_plot(w)
-    plt.show()
-
-    print(f'Relative Hinf error:   {err.hinf_norm() / fom.hinf_norm():.3e}')
-    print(f'Relative H2 error:     {err.h2_norm() / fom.h2_norm():.3e}')
-    print(f'Relative Hankel error: {err.hankel_norm() / fom.hankel_norm():.3e}')
-
 
 if __name__ == '__main__':
     run(main)
