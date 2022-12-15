@@ -1468,10 +1468,10 @@ class PHLTIModel(LTIModel):
 
         assert solver_options is None or solver_options.keys() <= {'lyap_lrcf', 'lyap_dense'}
 
-        super().__init__(A=(J - R) if isinstance(Q, IdentityOperator) else (J - R) @ Q,
-                         B=G - P,
-                         C=(G + P).H if isinstance(Q, IdentityOperator) else (G + P).H @ Q,
-                         D=S - N, E=E,
+        super().__init__(A=contract(expand(J - R) @ Q),
+                         B=contract(expand(G - P)),
+                         C=contract(expand((G + P).H @ Q)),
+                         D=contract(expand(S - N)), E=E,
                          solver_options=solver_options, error_estimator=error_estimator, visualizer=visualizer,
                          name=name)
         self.__auto_init(locals())
