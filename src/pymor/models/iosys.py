@@ -24,7 +24,7 @@ from pymor.models.transforms import BilinearTransformation, MoebiusTransformatio
 from pymor.operators.block import (BlockOperator, BlockRowOperator, BlockColumnOperator, BlockDiagonalOperator,
                                    SecondOrderModelOperator)
 from pymor.operators.constructions import (IdentityOperator, InverseOperator, LincombOperator, LinearInputOperator,
-                                           LowRankOperator, VectorOperator, ZeroOperator)
+                                           LowRankOperator, VectorOperator, ZeroOperator, VectorArrayOperator)
 from pymor.operators.numpy import NumpyMatrixOperator
 from pymor.parameters.base import Parameters, Mu
 from pymor.vectorarrays.block import BlockVectorSpace
@@ -1498,7 +1498,8 @@ class PHLTIModel(LTIModel):
 
         return self.with_(E=E, J=J, R=R, G=G, P=P, Q=None)
 
-    def from_passive_LTIModel(self, model, generalized=True):
+    @classmethod
+    def from_passive_LTIModel(cls, model, generalized=True):
         """
         Convert a passive |LTIModel| to a |PHLTIModel|.
 
@@ -1511,15 +1512,17 @@ class PHLTIModel(LTIModel):
         """
 
         # Determine solution of KYP inequality
-        L = model.gramian('pr_c_lrcf')
+        L = VectorArrayOperator(model.gramian('pr_c_lrcf'), adjoint=True)
         X = L.H @ L
+
+        Q = None
 
         if generalized:
             E = X.H @ model.E
             J = 0.5 * (X @ model.A - X @ model.A.H)
             R = -0.5 * (X @ model.A - X @ model.A.H)
-            G = 0.5 * (X @ model.B + model.C)
-            P = 0.5 * (X @ model.B - model.C)
+            G = 0.5 * (X @ model.B + model.C.H)
+            P = 0.5 * (X @ model.B - model.C.H)
             S = 0.5 * (model.D + model.D.H)
             N = 0.5 * (model.D - model.D.H)
 
@@ -1532,7 +1535,8 @@ class PHLTIModel(LTIModel):
             N = 0.5 * (model.D - model.D.H)
             Q = X
 
-        return self.with_(E=E, J=J, R=R, G=G, P=P, S=S, N=N, Q=Q, new_type=PHLTIModel)
+        return cls(E=E, J=J, R=R, G=G, P=P, S=S, N=N, Q=Q, solver_options=model.solver_options,
+                   error_estimator=model.error_estimator, visualizer=model.visualizer, name=model.name)
 
     def __str__(self):
         string = (

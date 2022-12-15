@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from typer import run, Option
 
-from pymor.models.iosys import PHLTIModel
+from pymor.models.iosys import PHLTIModel, LTIModel
 from pymor.reductors.bt import PRBTReductor
 from pymor.reductors.ph.ph_irka import PHIRKAReductor
 
@@ -120,10 +120,19 @@ def msd(n=6, m=2, m_i=4, k_i=4, c_i=1, as_lti=False):
 
 
 def main(
-        n: int = Option(100, help='Order of the Mass-Spring-Damper system.')
+        n: int = Option(100, help='Order of the Mass-Spring-Damper system.'),
+        m: int = Option(2, help='Number of inputs and outputs of the Mass-Spring-Damper system.')
 ):
-    J, R, G, P, S, N, E, Q = msd(n, m=2)
+
+    A, B, C, D, E = msd(n, m, as_lti=True)
+    lti = LTIModel.from_matrices(A, B, C, D, E)
+    phlti = PHLTIModel.from_passive_LTIModel(lti)
+
+    J, R, G, P, S, N, E, Q = msd(n, m)
     fom = PHLTIModel.from_matrices(J, R, G, Q=Q)
+
+    print(f'Error: {(fom - phlti).h2_norm():.2e}')
+
     h2 = fom.h2_norm()
 
     prbt = PRBTReductor(fom)
@@ -132,12 +141,14 @@ def main(
     reductors = {'pH-IRKA': phirka, 'PRBT': prbt}
     markers = {'pH-IRKA': 's', 'PRBT': 'o'}
 
-    reduced_order = range(2, 22, 2)
+    reduced_order = range(2, 8, 2)
     h2_errors = np.zeros((len(reductors), len(reduced_order)))
 
     for i, reductor in enumerate(reductors):
         for j, r in enumerate(reduced_order):
             rom = reductors[reductor].reduce(r)
+            if not isinstance(rom, PHLTIModel):
+                rom = PHLTIModel.from_passive_LTIModel(rom)
             h2_errors[i, j] = (rom - fom).h2_norm() / h2
 
     plt.figure()
