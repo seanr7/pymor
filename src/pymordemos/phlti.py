@@ -4,7 +4,6 @@
 # License: BSD 2-Clause License (https://opensource.org/licenses/BSD-2-Clause)
 
 import numpy as np
-from slycot import sb02od
 from matplotlib import pyplot as plt
 from typer import run, Option
 
@@ -119,64 +118,35 @@ def msd(n=6, m=2, m_i=4, k_i=4, c_i=1, as_lti=False):
 
     return J, R, G, P, S, N, E, Q
 
-def care(A, B=None, Q=None, R=None, S=None):
-    """Solve the continuous-time algebraic Riccati equation.
-            Q + A'X + XA - (S+XB)R^{-1}(S+XB)' = 0
-    """
-    dico = 'C'
-
-    if Q is None:
-        Q = np.zeros(A.shape)
-
-    n = A.shape[0]
-    m = B.shape[1]
-
-    # Q + A'X + XA + (-L-XB)R^{-1} (-L'-B'X) = 0
-    return sb02od(n, m, A, B, Q, R, dico, L=S)
-
-def kyp(A, B, C, D, X):
-    return np.block([[-A.T @ X - X @ A, C.T - X @ B], [C - B.T @ X, D + D.T]])
 
 def main(
         n: int = Option(100, help='Order of the Mass-Spring-Damper system.')
 ):
-    # Riccati test
-    #################################################
-    A, B, C, D, E = msd(n=100, m=2, as_lti=True)
-    R = D + D.T + 1e-6 * np.eye(D.shape[0])
-    out = care(A, B, R=R, S=-C.T)
-    X = out[0]
-
-    # print(out[0])
-
-    W = kyp(A, B, C, D, X)
-
-    assert np.allclose(W, W.T)
-    w = np.linalg.eigvalsh(W)
-    # print(w)
-    # assert np.all(w > 0)
-
-    sol = A.T @ X + X @ A - (-C.T + X @ B) @ np.linalg.inv(R) @ (-C.T + X @ B).T
-    print(sol)
-    assert np.allclose(sol, np.zeros_like(sol))
-    #################################################
-
     J, R, G, P, S, N, E, Q = msd(n, m=2)
     fom = PHLTIModel.from_matrices(J, R, G, Q=Q)
+    h2 = fom.h2_norm()
 
     prbt = PRBTReductor(fom)
-    rom_prbt = prbt.reduce(20)
-
     phirka = PHIRKAReductor(fom)
-    rom_phirka = phirka.reduce(20)
 
-    # Magnitude plot
-    w = (1e-2, 1e8)
-    fig, ax = plt.subplots()
-    fom.transfer_function.mag_plot(w, ax=ax, label='FOM')
-    rom_phirka.transfer_function.mag_plot(w, ax=ax, linestyle='--', label='pH-IRKA')
-    rom_prbt.transfer_function.mag_plot(w, ax=ax, linestyle='--', label='PRBT')
-    _ = ax.legend()
+    reductors = {'pH-IRKA': phirka, 'PRBT': prbt}
+    markers = {'pH-IRKA': 's', 'PRBT': 'o'}
+
+    reduced_order = range(2, 22, 2)
+    h2_errors = np.zeros((len(reductors), len(reduced_order)))
+
+    for i, reductor in enumerate(reductors):
+        for j, r in enumerate(reduced_order):
+            rom = reductors[reductor].reduce(r)
+            h2_errors[i, j] = (rom - fom).h2_norm() / h2
+
+    plt.figure()
+    for i, reductor in enumerate(reductors):
+        plt.semilogy(reduced_order, h2_errors[i], label=reductor, marker=markers[reductor])
+
+    plt.ylabel('Relative $\mathcal{H}_2$-error')
+    plt.xlabel('Reduced order r')
+    plt.legend()
     plt.show()
 
 if __name__ == '__main__':
