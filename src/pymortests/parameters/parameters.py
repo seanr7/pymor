@@ -17,21 +17,16 @@ pytestmark = pytest.mark.builtin
 num_samples = 100
 
 
-@pytest.fixture(scope='module', params=([1], [2], [1, 1]))
-def space(request):
-    parameter_sizes = request.param
-    param_dict = {'diffusion_' + str(ind): size for ind, size in enumerate(parameter_sizes)}
-    return Parameters(param_dict).space(0.1, 1)
-
-
+@given(pyst.parameter_space(max_num=2, max_dim=2))
 def test_uniform(space):
-    values = space.sample_uniformly(num_samples)
+    values = space.sample_uniformly(num_samples // 10)
     total_num_parameters = sum([space.parameters[k] for k in space.parameters])
-    assert len(values) == num_samples**total_num_parameters
+    assert len(values) == (num_samples // 10)**total_num_parameters
     for value in values:
         assert space.contains(value)
 
 
+@given(pyst.parameter_space())
 def test_randomly(space):
     values = space.sample_randomly(num_samples)
     assert len(values) == num_samples
@@ -39,11 +34,13 @@ def test_randomly(space):
         assert space.contains(value)
 
 
+@given(pyst.parameter_space())
 def test_randomly_without_count(space):
     mu = space.sample_randomly()
     assert isinstance(mu, Mu)
 
 
+@given(pyst.parameter_space())
 def test_clip(space):
     from copy import deepcopy
     params = space.parameters
