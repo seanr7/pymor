@@ -505,7 +505,7 @@ def parameter_space(draw, min_num=1, max_num=3, min_dim=1, max_dim=5, param_rang
 
 @hyst.composite
 def active_mu_data(draw, space_strategy=parameter_space(), num_mus=10):
-    from random import sample, randint
+    from random import randint, sample
 
     space = draw(space_strategy)
     dim = space.parameters.dim
