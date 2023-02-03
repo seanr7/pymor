@@ -19,6 +19,10 @@
 * Mohamed Adel Naguib Ahmed, mohamedadel1551998@gmail.com
   * Input-output selection in `bode_plot` function
 
+* Art Pelling, a.pelling@tu-berlin.de
+  * refactoring of randomized linear algebra module
+  * RandomizedRangeFinder class
+
 ### pyMOR 2022.2
 
 * Tim Keil, tim.keil@uni-muenster.de
