@@ -8,7 +8,7 @@ import scipy.linalg as spla
 from pymor.algorithms.projection import project
 from pymor.operators.block import BlockDiagonalOperator, BlockOperator
 from pymor.operators.numpy import NumpyMatrixOperator
-from pymor.parameters.functionals import ProjectionParameterFunctional, ExpressionParameterFunctional
+from pymor.parameters.functionals import ExpressionParameterFunctional, ProjectionParameterFunctional
 from pymor.vectorarrays.block import BlockVectorSpace
 from pymor.vectorarrays.numpy import NumpyVectorSpace
 
