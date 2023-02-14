@@ -78,5 +78,5 @@ def main(
     run_mor_method_dd_param(lti, ss, LoewnerReductor, 'Loewner')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     run(main)
