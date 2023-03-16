@@ -20,7 +20,7 @@ class PHLTIPGReductor(ProjectionBasedReductor):
     def __init__(self, fom, V, E_biorthonormal=False):
         assert isinstance(fom, PHLTIModel)
 
-        W = self._obtain_W(fom, V)
+        W = fom.Q.apply(V)
 
         super().__init__(fom, {'W': W, 'V': V})
         self.E_biorthonormal = E_biorthonormal
@@ -61,7 +61,3 @@ class PHLTIPGReductor(ProjectionBasedReductor):
 
     def reconstruct(self, u, basis='V'):
         return super().reconstruct(u, basis)
-
-    def _obtain_W(self, fom, V):
-        # If with Q, W = QV
-        return V
