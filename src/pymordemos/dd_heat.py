@@ -54,7 +54,7 @@ def main(
         diameter: float = Argument(0.1, help='Diameter option for the domain discretizer.'),
         n: int = Argument(50, help='Number of frequency samples.')
 ):
-    """Parametric 1D heat equation example."""
+    """1D heat equation example."""
     set_log_levels({'pymor.algorithms.gram_schmidt.gram_schmidt': 'WARNING'})
 
     # Model
