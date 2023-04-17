@@ -16,8 +16,8 @@ from pymor.discretizers.builtin import discretize_instationary_cg
 from pymor.reductors.loewner import LoewnerReductor
 
 
-def run_mor_method_dd_param(fom, ss, reductor_cls, reductor_short_name, **reductor_kwargs):
-    """Plot reductor for a sample parameter.
+def run_mor_method_dd(fom, ss, reductor_cls, reductor_short_name, **reductor_kwargs):
+    """Plot data-driven reductor.
 
     Parameters
     ----------
@@ -39,13 +39,12 @@ def run_mor_method_dd_param(fom, ss, reductor_cls, reductor_short_name, **reduct
     n_w = 50
     w = np.geomspace(ss[0]/2, ss[-1]*2, n_w)
 
-    fig = plt.figure(constrained_layout=True)
-
-    fom.transfer_function.mag_plot(w, label='FOM')
-    rom.transfer_function.mag_plot(w, label='ROM', linestyle='dashed')
-    err.transfer_function.mag_plot(w, label='Error', linestyle='dotted')
+    fig, ax = plt.subplots(constrained_layout=True)
+    fom.transfer_function.mag_plot(w, ax=ax, label='FOM')
+    rom.transfer_function.mag_plot(w, ax=ax, label='ROM', linestyle='dashed')
+    err.transfer_function.mag_plot(w, ax=ax, label='Error', linestyle='dotted')
     fig.suptitle(fr'Magnitude plot for {reductor_short_name}')
-    fig.legend()
+    ax.legend()
 
     plt.show()
 
@@ -75,7 +74,7 @@ def main(
 
     ss = np.logspace(-1, 4, n)
 
-    run_mor_method_dd_param(lti, ss, LoewnerReductor, 'Loewner')
+    run_mor_method_dd(lti, ss, LoewnerReductor, 'Loewner')
 
 
 if __name__ == '__main__':
